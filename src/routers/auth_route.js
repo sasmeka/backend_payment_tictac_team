@@ -4,10 +4,14 @@ const route = express.Router()
 const authCheck = require('../middlewares/authCheck')
 // import controllers
 const control = require('../controllers/auth')
-// const cookieparser = require('cookie-parser');
-// route.use(cookieparser());
+const cookieparser = require('cookie-parser');
+route.use(cookieparser());
 
-route.get('/', control.home)
+// route.get('/', authCheck('admin', 'user'), control.home)
+route.get('/refresh_token', control.refresh)
+route.post('/login', control.login)
+route.post('/register', control.register)
+route.get('/verification', control.verification)
 
 //export
 module.exports = route
