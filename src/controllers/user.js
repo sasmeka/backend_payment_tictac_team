@@ -8,13 +8,16 @@ const sendMail = require('../utils/sendMail')
 
 control.getAllData = async (req, res) => {
     try {
-        let { page, limit } = req.query
+        let { page, limit, search_name, search_phone_number } = req.query
         page = page ? parseInt(page) : 1
         limit = limit ? parseInt(limit) : 100
+        search_name = search_name ? search_name : ""
+        search_phone_number = search_phone_number ? search_phone_number : ""
+
         let offset = page >= 1 ? 0 + ((page - 1) * limit) : 0
-        const result = await model.getAllData({ limit, offset })
+        const result = await model.getAllData({ limit, offset, search_name, search_phone_number })
         if (result.rowCount == 0) throw 'data not found.'
-        const result_count_data = await model.getCountData()
+        const result_count_data = await model.getCountData({ search_name, search_phone_number })
         const meta = {
             next: result_count_data.rows[0].count_data <= 0 ? null : page == Math.ceil(result_count_data.rows[0].count_data / limit) ? null : page + 1,
             prev: page == 1 ? null : page - 1,

@@ -2,9 +2,24 @@ const db = require('../configs/database')
 const escape = require('pg-format')
 const model = {}
 
-model.getAllData = ({ limit, offset }) => {
+model.getAllData = ({ limit, offset, search_name, search_phone_number }) => {
+    search_name = search_name == "" ? "" : escape("AND (LOWER(first_name) %s OR LOWER(last_name) %s)", "like LOWER('%" + search_name + "%')", "like LOWER('%" + search_name + "%')")
+    search_phone_number = search_phone_number == "" ? "" : escape("AND phone %s", "like '%" + search_phone_number + "%'")
     return new Promise((resolve, reject) => {
-        db.query(`SELECT id_user, first_name, last_name, phone, email, status_verification, "role",image FROM public.users ORDER BY id_user DESC LIMIT $1 OFFSET $2;`, [limit, offset])
+        db.query(`SELECT id_user,username, first_name, last_name, phone, email, status_verification, "role",image,balance FROM public.users where true ${search_name} ${search_phone_number} ORDER BY id_user DESC LIMIT $1 OFFSET $2;`, [limit, offset])
+            .then((res) => {
+                resolve(res)
+            }).catch((e) => {
+                reject(e)
+            })
+    })
+}
+
+model.getCountData = ({ search_name, search_phone_number }) => {
+    search_name = search_name == "" ? "" : escape("AND (LOWER(first_name) %s OR LOWER(last_name) %s)", "like LOWER('%" + search_name + "%')", "like LOWER('%" + search_name + "%')")
+    search_phone_number = search_phone_number == "" ? "" : escape("AND phone %s", "like '%" + search_phone_number + "%'")
+    return new Promise((resolve, reject) => {
+        db.query(`select count(id_user) as count_data from users where true ${search_name} ${search_phone_number};`)
             .then((res) => {
                 resolve(res)
             }).catch((e) => {
@@ -15,7 +30,7 @@ model.getAllData = ({ limit, offset }) => {
 
 model.getData = (id) => {
     return new Promise((resolve, reject) => {
-        db.query('SELECT id_user, first_name, last_name, phone, email, status_verification, "role",image FROM public.users WHERE id_user=$1;', [id])
+        db.query('SELECT id_user,username, first_name, last_name, phone, email, status_verification, "role",image,balance FROM public.users WHERE id_user=$1;', [id])
             .then((res) => {
                 resolve(res)
             }).catch((e) => {
@@ -157,16 +172,6 @@ model.deleteAllData = async ({ id_user }) => {
         await db.query('ROLLBACK')
         throw error
     }
-}
-model.getCountData = () => {
-    return new Promise((resolve, reject) => {
-        db.query(`select count(id_user) as count_data from users;`)
-            .then((res) => {
-                resolve(res)
-            }).catch((e) => {
-                reject(e)
-            })
-    })
 }
 
 module.exports = model
