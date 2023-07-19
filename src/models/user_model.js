@@ -23,6 +23,18 @@ model.getData = (id) => {
             })
     })
 }
+
+model.getDataAll = (id) => {
+    return new Promise((resolve, reject) => {
+        db.query('SELECT * FROM public.users WHERE id_user=$1;', [id])
+            .then((res) => {
+                resolve(res)
+            }).catch((e) => {
+                reject(e)
+            })
+    })
+}
+
 model.newIdData = () => {
     return new Promise((resolve, reject) => {
         db.query('SELECT currval(pg_get_serial_sequence(\'public.users\', \'id_user\')) as new_id_user')
@@ -67,9 +79,31 @@ model.updateData = ({ id_user, first_name, last_name, phone, email, image, statu
     })
 }
 
-model.change_Password = ({ id_user, pass }) => {
+model.addDataPhoneNumber = ({ id_user, phone }) => {
     return new Promise((resolve, reject) => {
-        db.query(`update public.users SET pass=$2 where id_user = $1;`, [id_user, pass])
+        db.query(`update public.users SET phone=$2 where id_user = $1;`, [id_user, phone])
+            .then(() => {
+                resolve('phone number successfully added.')
+            }).catch(() => {
+                reject('phone number failed to add.')
+            })
+    })
+}
+
+model.deleteDataPhoneNumber = ({ id_user }) => {
+    return new Promise((resolve, reject) => {
+        db.query(`update public.users SET phone=NULL where id_user = $1;`, [id_user])
+            .then(() => {
+                resolve('phone number successfully deleted.')
+            }).catch(() => {
+                reject('phone number failed to delete.')
+            })
+    })
+}
+
+model.change_Password = ({ id_user, new_pass }) => {
+    return new Promise((resolve, reject) => {
+        db.query(`update public.users SET pass=$2 where id_user = $1;`, [id_user, new_pass])
             .then(() => {
                 resolve('change password successfully.')
             }).catch(() => {
