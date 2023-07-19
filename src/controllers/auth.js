@@ -118,4 +118,49 @@ control.verification = async (req, res) => {
     }
 }
 
+control.sendEmailForgetPass = async (req, res) => {
+    try {
+        const { email } = req.body
+
+        const result_user = await model.getDatabyEmail(email)
+        if (result_user.rowCount <= 0) return resp(res, 401, 'e-mail not registered.')
+
+        //send forget mail
+        const token_forget = jwt(email).token
+        const subject_mail = 'Forget Password Zwallet'
+        const text_mail = process.env.front_url + `/forgetpass?token=${token_forget}`
+        sendMail(email, subject_mail, text_mail)
+
+        return resp(res, 200, 'please check your email to change the password.')
+    } catch (e) {
+        console.log(e)
+        return resp(res, 500, e)
+    }
+}
+
+control.changeForgetPassword = async (req, res) => {
+    try {
+        const tokens = req.query.token
+        let email = ''
+        jwebt.verify(tokens, process.env.JWT_PRIVATE_KEY,
+            (err, decode) => {
+                if (err) {
+                    throw err.message
+                }
+                email = decode.data
+            })
+        const { pass } = req.body
+        const pass_hash = await hashing(pass)
+        const result_user = await model.getDatabyEmail(email)
+        if (result_user.rowCount == 0) return resp(res, 401, 'e-mail not registered.')
+        const result_email = result_user.rows[0].email
+        const result_id = result_user.rows[0].id_user
+        const result = await model.changeForgetPassword({ result_id, result_email, pass_hash })
+        return resp(res, 200, result)
+    } catch (e) {
+        console.log(e)
+        return resp(res, 401, e)
+    }
+}
+
 module.exports = control

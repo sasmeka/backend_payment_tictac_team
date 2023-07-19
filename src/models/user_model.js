@@ -89,6 +89,17 @@ model.verification = ({ result_id, result_email }) => {
     })
 }
 
+model.changeForgetPassword = ({ result_id, result_email, pass_hash }) => {
+    return new Promise((resolve, reject) => {
+        db.query('update public.users SET pass=$3 where id_user = $1 and email=$2;', [result_id, result_email, pass_hash])
+            .then(() => {
+                resolve('change forget password successfully.')
+            }).catch(() => {
+                reject('change forget password failed.')
+            })
+    })
+}
+
 model.deleteData = ({ id_user }) => {
     return new Promise((resolve, reject) => {
         db.query('delete from public.users where id_user=$1', [id_user])
@@ -100,23 +111,11 @@ model.deleteData = ({ id_user }) => {
     })
 }
 
-// model.deleteDataBookingbyUser = ({ id_user }) => {
-//     return new Promise((resolve, reject) => {
-//         db.query('delete from public.booking where id_user=$1', [id_user])
-//             .then(() => {
-//                 resolve('booking by user data successfully deleted.')
-//             }).catch(() => {
-//                 reject('booking by user data failed to delete.')
-//             })
-//     })
-// }
-
 model.deleteAllData = async ({ id_user }) => {
     try {
         const result_data = await model.getData(id_user)
         if (result_data.rowCount == 0) throw ('data not found.')
         await db.query('BEGIN')
-        // await model.deleteDataBookingbyUser({ id_user })
         const result = await model.deleteData({ id_user })
         await db.query('COMMIT')
         return result

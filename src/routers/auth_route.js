@@ -12,6 +12,7 @@ route.get('/refresh_token', control.refresh)
 route.post('/login', control.login)
 route.post('/register', control.register)
 route.get('/verification', control.verification)
+route.post('/forgetpass', control.sendEmailForgetPass)
 
 //export
 module.exports = route
