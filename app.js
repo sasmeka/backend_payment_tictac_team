@@ -30,3 +30,5 @@ db.connect().then(() => {
     console.log(e)
 })
 
+module.exports = app
+
