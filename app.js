@@ -19,7 +19,6 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(route)
 const dir = path.join(__dirname, '/');
-console.log(dir)
 app.use(express.static(dir));
 
 db.connect().then(() => {
@@ -29,6 +28,4 @@ db.connect().then(() => {
 }).catch((e) => {
     console.log(e)
 })
-
-module.exports = app
 
