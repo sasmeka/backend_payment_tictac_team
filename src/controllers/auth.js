@@ -128,7 +128,7 @@ control.sendEmailForgetPass = async (req, res) => {
         //send forget mail
         const token_forget = jwt(email).token
         const subject_mail = 'Forget Password Zwallet'
-        const text_mail = process.env.front_url + `/forgetpass?token=${token_forget}`
+        const text_mail = process.env.front_url + `/reset-change-password?token=${token_forget}`
         sendMail(email, subject_mail, text_mail)
 
         return resp(res, 200, 'please check your email to change the password.')
