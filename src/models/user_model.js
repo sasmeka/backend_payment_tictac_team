@@ -30,7 +30,7 @@ model.getCountData = ({ search_name, search_phone_number }) => {
 
 model.getData = (id) => {
     return new Promise((resolve, reject) => {
-        db.query('SELECT id_user,username, first_name, last_name, phone, email, status_verification, "role",image,balance FROM public.users WHERE id_user=$1;', [id])
+        db.query('SELECT id_user,username, first_name, last_name, phone, email, status_verification, pin, "role", image, balance FROM public.users WHERE id_user=$1;', [id])
             .then((res) => {
                 resolve(res)
             }).catch((e) => {
