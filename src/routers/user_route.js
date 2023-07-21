@@ -12,6 +12,7 @@ route.get('/bytoken', authCheck('user'), control.getData)
 route.post('/add_phone_number', authCheck('user'), control.addPhoneNumber)
 route.post('/', authCheck('user'), control.addData)
 
+route.put('/change_pin', authCheck('user'), control.change_Pin)
 route.put('/change_password', authCheck('user'), control.change_Password)
 route.put('/:id', authCheck('user'), upload_file.single('image'), control.updateData)
 

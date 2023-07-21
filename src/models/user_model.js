@@ -94,6 +94,17 @@ model.updateData = ({ id_user, first_name, last_name, phone, email, image, statu
     })
 }
 
+model.updatePin = ({ id_user, pin }) => {
+    return new Promise((resolve, reject) => {
+        db.query(`update public.users SET pin=$2 where id_user = $1;`, [id_user, pin])
+            .then(() => {
+                resolve('PIN successfully updated.')
+            }).catch(() => {
+                reject('PIN failed to update.')
+            })
+    })
+}
+
 model.addDataPhoneNumber = ({ id_user, phone }) => {
     return new Promise((resolve, reject) => {
         db.query(`update public.users SET phone=$2 where id_user = $1;`, [id_user, phone])

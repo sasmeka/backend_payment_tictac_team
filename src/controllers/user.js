@@ -132,6 +132,19 @@ control.change_Password = async (req, res) => {
         return resp(res, 500, e)
     }
 }
+control.change_Pin = async (req, res) => {
+    try {
+        const id_user = req.data_jwt.id_user
+        const result_data = await model.getDataAll(id_user)
+        let { pin } = req.body
+        if (result_data.rowCount == 0) throw 'data not found.'
+        const result = await model.updatePin({ id_user, pin })
+        return resp(res, 200, result)
+    } catch (e) {
+        console.log(e)
+        return resp(res, 500, e)
+    }
+}
 
 control.deleteData = async (req, res) => {
     try {
