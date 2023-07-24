@@ -77,7 +77,7 @@ model.addAllData = async ({ id_user_sender, id_user_receiver, amount, notes }) =
 
 model.getAllData = ({ limit, offset, id_user, show_data_by }) => {
     id_user = id_user == "" ? "" : escape("AND (tu.id_user_sender=%L OR tu.id_user_receiver=%L)", id_user, id_user)
-    show_data_by = show_data_by == '' ? '' : show_data_by == 'week' ? escape("and tu.create_at >= now()-interval '6 day'") : show_data_by == 'month' ? escape("AND EXTRACT(MONTH FROM tu.create_at)=EXTRACT(MONTH FROM now())") : show_data_by == 'day' ? escape("AND EXTRACT(MONTH FROM tu.create_at)=EXTRACT(MONTH FROM now()) AND EXTRACT(DAY FROM tu.create_at)=EXTRACT(DAY FROM now())") : ''
+    show_data_by = show_data_by == '' ? '' : show_data_by == 'week' ? escape("and tu.create_at >= now()-interval '6 day' AND EXTRACT(MONTH FROM tu.create_at)=EXTRACT(MONTH FROM now()) AND EXTRACT(YEAR FROM tu.create_at)=EXTRACT(YEAR FROM now())") : show_data_by == 'month' ? escape("AND EXTRACT(MONTH FROM tu.create_at)=EXTRACT(MONTH FROM now()) AND EXTRACT(YEAR FROM tu.create_at)=EXTRACT(YEAR FROM now())") : show_data_by == 'day' ? escape("AND EXTRACT(YEAR FROM tu.create_at)=EXTRACT(YEAR FROM now()) AND EXTRACT(MONTH FROM tu.create_at)=EXTRACT(MONTH FROM now()) AND EXTRACT(DAY FROM tu.create_at)=EXTRACT(DAY FROM now())") : ''
     return new Promise((resolve, reject) => {
         db.query(`SELECT tu.id_transaction ,tu.amount,tu.notes ,tu.create_at ,us.user_data_sender,ur.user_data_receiver FROM public.transaction_users tu 
         left join (select id_user, json_agg(jsonb_build_object('id_user',id_user,'first_name',first_name,'last_name',last_name,'username',username,'phone',phone,'image',image)) as user_data_sender from users group by id_user) as us on tu.id_user_sender =us.id_user
@@ -92,7 +92,7 @@ model.getAllData = ({ limit, offset, id_user, show_data_by }) => {
 
 model.getCountData = ({ id_user, show_data_by }) => {
     id_user = id_user == "" ? "" : escape("AND (id_user_sender=%L OR id_user_receiver=%L)", id_user, id_user)
-    show_data_by = show_data_by == '' ? '' : show_data_by == 'week' ? escape("and create_at >= now()-interval '6 day'") : escape("AND EXTRACT(MONTH FROM create_at)=EXTRACT(MONTH FROM now())")
+    show_data_by = show_data_by == '' ? '' : show_data_by == 'week' ? escape("and create_at >= now()-interval '6 day' AND EXTRACT(MONTH FROM create_at)=EXTRACT(MONTH FROM now()) AND EXTRACT(YEAR FROM create_at)=EXTRACT(YEAR FROM now())") : show_data_by == 'month' ? escape("AND EXTRACT(MONTH FROM create_at)=EXTRACT(MONTH FROM now()) AND EXTRACT(YEAR FROM create_at)=EXTRACT(YEAR FROM now())") : show_data_by == 'day' ? escape("AND EXTRACT(YEAR FROM create_at)=EXTRACT(YEAR FROM now()) AND EXTRACT(MONTH FROM create_at)=EXTRACT(MONTH FROM now()) AND EXTRACT(DAY FROM create_at)=EXTRACT(DAY FROM now())") : ''
     return new Promise((resolve, reject) => {
         db.query(`select count(id_transaction) as count_data from public.transaction_users where true ${id_user} ${show_data_by} ; `)
             .then((res) => {
