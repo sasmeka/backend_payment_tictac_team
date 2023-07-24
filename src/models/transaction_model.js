@@ -103,4 +103,26 @@ model.getCountData = ({ id_user, show_data_by }) => {
     })
 }
 
+model.getTotalSend = ({ id_user }) => {
+    return new Promise((resolve, reject) => {
+        db.query(`select sum(amount) as total_send from public.transaction_users where true and create_at >= now()-interval '6 day' AND EXTRACT(MONTH FROM create_at)=EXTRACT(MONTH FROM now()) AND EXTRACT(YEAR FROM create_at)=EXTRACT(YEAR FROM now()) AND id_user_sender =${id_user}`)
+            .then((res) => {
+                resolve(res)
+            }).catch((e) => {
+                reject(e)
+            })
+    })
+}
+
+model.getTotalReceiver = ({ id_user }) => {
+    return new Promise((resolve, reject) => {
+        db.query(`select sum(amount) as total_receiver from public.transaction_users where true and create_at >= now()-interval '6 day' AND EXTRACT(MONTH FROM create_at)=EXTRACT(MONTH FROM now()) AND EXTRACT(YEAR FROM create_at)=EXTRACT(YEAR FROM now()) AND id_user_receiver =${id_user}`)
+            .then((res) => {
+                resolve(res)
+            }).catch((e) => {
+                reject(e)
+            })
+    })
+}
+
 module.exports = model

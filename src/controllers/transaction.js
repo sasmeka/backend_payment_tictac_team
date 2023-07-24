@@ -14,6 +14,22 @@ control.Transfer = async (req, res) => {
     }
 }
 
+control.getReceiverSend = async (req, res) => {
+    try {
+        const id_user = req.data_jwt.id_user
+        const result_receiver = await model.getTotalReceiver({ id_user })
+        const result_send = await model.getTotalSend({ id_user })
+        const result = [{
+            "total_receiver": result_receiver.rows[0].total_receiver,
+            "total_send": result_send.rows[0].total_send
+        }]
+        return resp(res, 200, result)
+    } catch (e) {
+        console.log(e)
+        return resp(res, 500, e)
+    }
+}
+
 control.getAllData = async (req, res) => {
     try {
         let { page, limit, show_data_by } = req.query
