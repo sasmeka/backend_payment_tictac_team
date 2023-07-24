@@ -60,7 +60,7 @@ control.addData = async (req, res) => {
 control.updateData = async (req, res) => {
     try {
         const id_user = req.params.id
-        const { first_name, last_name, phone, email } = req.body
+        const { first_name, last_name, email } = req.body
         const image = req.file !== undefined ? req.file.path : ''
         const result_data = await model.getData(id_user)
         if (result_data.rowCount == 0) throw 'data not found.'
@@ -71,7 +71,7 @@ control.updateData = async (req, res) => {
             const result_user = await model.getDatabyEmail(email)
             if (result_user.rowCount > 0) throw 'e-mail has been registered.'
             status_verification = 0
-            result = await model.updateData({ id_user, first_name, last_name, phone, email, image, status_verification })
+            result = await model.updateData({ id_user, first_name, last_name, email, image, status_verification })
 
             //send verification mail
             const token_verification = jwt(email).token
@@ -81,7 +81,7 @@ control.updateData = async (req, res) => {
 
             return resp(res, 200, 'please verify via email.')
         } else {
-            result = await model.updateData({ id_user, first_name, last_name, phone, email, image, status_verification })
+            result = await model.updateData({ id_user, first_name, last_name, email, image, status_verification })
         }
         return resp(res, 200, result)
     } catch (e) {
