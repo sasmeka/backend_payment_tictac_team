@@ -4,9 +4,9 @@ const resp = require('../utils/responses')
 
 control.Transfer = async (req, res) => {
     try {
-        const { id_user_receiver, amount, notes } = req.body
+        const { id_user_receiver, amount, notes, create_at } = req.body
         const id_user_sender = req.data_jwt.id_user
-        const result = await model.addAllData({ id_user_sender, id_user_receiver, amount, notes })
+        const result = await model.addAllData({ id_user_sender, id_user_receiver, amount, notes, create_at })
         return resp(res, 200, result)
     } catch (e) {
         console.log(e)

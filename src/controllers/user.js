@@ -13,11 +13,11 @@ control.getAllData = async (req, res) => {
         limit = limit ? parseInt(limit) : 100
         search_name = search_name ? search_name : ""
         search_phone_number = search_phone_number ? search_phone_number : ""
-
+        const id_user = req.data_jwt.id_user
         let offset = page >= 1 ? 0 + ((page - 1) * limit) : 0
-        const result = await model.getAllData({ limit, offset, search_name, search_phone_number })
+        const result = await model.getAllData({ limit, offset, search_name, search_phone_number, id_user })
         if (result.rowCount == 0) throw 'data not found.'
-        const result_count_data = await model.getCountData({ search_name, search_phone_number })
+        const result_count_data = await model.getCountData({ search_name, search_phone_number, id_user })
         const meta = {
             next: result_count_data.rows[0].count_data <= 0 ? null : page == Math.ceil(result_count_data.rows[0].count_data / limit) ? null : page + 1,
             prev: page == 1 ? null : page - 1,

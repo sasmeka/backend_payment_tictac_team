@@ -46,9 +46,9 @@ model.reduceBalance = ({ id_user_sender, amount }) => {
     })
 }
 
-model.addData = ({ id_user_sender, id_user_receiver, amount, notes }) => {
+model.addData = ({ id_user_sender, id_user_receiver, amount, notes, create_at }) => {
     return new Promise((resolve, reject) => {
-        db.query('insert into public.transaction_users (id_user_sender, id_user_receiver, amount, notes) values ($1,$2,$3,$4);', [id_user_sender, id_user_receiver, amount, notes])
+        db.query('insert into public.transaction_users (id_user_sender, id_user_receiver, amount, notes,create_at) values ($1,$2,$3,$4,$5);', [id_user_sender, id_user_receiver, amount, notes, create_at])
             .then(() => {
                 resolve('transfer success.')
             }).catch((e) => {
@@ -57,7 +57,7 @@ model.addData = ({ id_user_sender, id_user_receiver, amount, notes }) => {
     })
 }
 
-model.addAllData = async ({ id_user_sender, id_user_receiver, amount, notes }) => {
+model.addAllData = async ({ id_user_sender, id_user_receiver, amount, notes, create_at }) => {
     try {
         const result_data = await model.getData(id_user_receiver)
         if (result_data.rowCount == 0) throw ('receiver not found.')
@@ -66,7 +66,7 @@ model.addAllData = async ({ id_user_sender, id_user_receiver, amount, notes }) =
         await db.query('BEGIN')
         await model.reduceBalance({ id_user_sender, amount })
         await model.addBalance({ id_user_receiver, amount })
-        const result = await model.addData({ id_user_sender, id_user_receiver, amount, notes })
+        const result = await model.addData({ id_user_sender, id_user_receiver, amount, notes, create_at })
         await db.query('COMMIT')
         return result
     } catch (error) {
