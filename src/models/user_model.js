@@ -2,11 +2,12 @@ const db = require('../configs/database')
 const escape = require('pg-format')
 const model = {}
 
-model.getAllData = ({ limit, offset, search_name, search_phone_number, id_user }) => {
+model.getAllData = ({ limit, offset, search_name, search_phone_number, id_user, search }) => {
     search_name = search_name == "" ? "" : escape("AND (LOWER(first_name) %s OR LOWER(last_name) %s)", "like LOWER('%" + search_name + "%')", "like LOWER('%" + search_name + "%')")
     search_phone_number = search_phone_number == "" ? "" : escape("AND phone %s", "like '%" + search_phone_number + "%'")
+    search = search == "" ? "" : escape("AND (LOWER(first_name) %s OR LOWER(last_name) %s OR phone %s)", "like '%" + search + "%'", "like '%" + search + "%'", "like '%" + search + "%'")
     return new Promise((resolve, reject) => {
-        db.query(`SELECT id_user,username, first_name, last_name, phone, email, status_verification, "role",image,balance FROM public.users where true AND id_user!=$3 ${search_name} ${search_phone_number} ORDER BY first_name,last_name ASC LIMIT $1 OFFSET $2;`, [limit, offset, id_user])
+        db.query(`SELECT id_user,username, first_name, last_name, phone, email, status_verification, "role",image,balance FROM public.users where true ${search_name} ${search_phone_number} ${search} AND id_user!=$3 ORDER BY first_name,last_name ASC LIMIT $1 OFFSET $2;`, [limit, offset, id_user])
             .then((res) => {
                 resolve(res)
             }).catch((e) => {
@@ -15,11 +16,12 @@ model.getAllData = ({ limit, offset, search_name, search_phone_number, id_user }
     })
 }
 
-model.getCountData = ({ search_name, search_phone_number, id_user }) => {
+model.getCountData = ({ search_name, search_phone_number, id_user, search }) => {
     search_name = search_name == "" ? "" : escape("AND (LOWER(first_name) %s OR LOWER(last_name) %s)", "like LOWER('%" + search_name + "%')", "like LOWER('%" + search_name + "%')")
     search_phone_number = search_phone_number == "" ? "" : escape("AND phone %s", "like '%" + search_phone_number + "%'")
+    search = search == "" ? "" : escape("AND (LOWER(first_name) %s OR LOWER(last_name) %s OR phone %s)", "like '%" + search + "%'", "like '%" + search + "%'", "like '%" + search + "%'")
     return new Promise((resolve, reject) => {
-        db.query(`select count(id_user) as count_data from users where true ${search_name} ${search_phone_number} AND id_user!=${id_user} ;`)
+        db.query(`select count(id_user) as count_data from users where true ${search_name} ${search_phone_number} ${search} AND id_user!=${id_user} ;`)
             .then((res) => {
                 resolve(res)
             }).catch((e) => {
