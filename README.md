@@ -126,7 +126,7 @@ This project worker can follow the steps below:
    https://www.postman.com/avionics-meteorologist-14374576/workspace/tickitz/collection/22380820-2a8492cd-b607-4943-b31d-9d8c50cc4543?action=share&creator=22380820
    ```
 3. Import the workspace that you already have in stage 2 into the postman application
-4. Go to tickitz workspace -> auth -> login. The default email and pass please use admin@mail.com and 123456. The token obtained can be used to access data
+4. Go to tickitz workspace -> auth -> login. The default email and pass please use user1@gmail.com and 123456. The token obtained can be used to access data
 5. Please try to do get data with the token. To insert a token, you can do it on the authorization tab and select Bearer Token
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
