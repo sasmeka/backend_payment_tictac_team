@@ -82,10 +82,10 @@ model.addData = ({ username, first_name, last_name, email, pass_hash }) => {
     })
 }
 
-model.updateData = ({ id_user, first_name, last_name, phone, email, image, status_verification }) => {
+model.updateData = ({ id_user, first_name, last_name, email, image, status_verification }) => {
     image = image == "" ? "" : escape(", image=%L", image)
     return new Promise((resolve, reject) => {
-        db.query(`update public.users SET first_name=$2, last_name=$3, phone=$4, email=$5, status_verification=$6 ${image} where id_user = $1;`, [id_user, first_name, last_name, phone, email, status_verification])
+        db.query(`update public.users SET first_name=$2, last_name=$3, email=$4, status_verification=$5 ${image} where id_user = $1;`, [id_user, first_name, last_name, email, status_verification])
             .then(() => {
                 resolve('user data successfully updated.')
             }).catch(() => {
