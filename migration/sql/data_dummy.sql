@@ -1,10 +1,10 @@
 -- INSERT TABLE users
 INSERT INTO public.users
 (id_user, username, first_name, last_name, phone, email, pass, status_verification, "role", pin, balance, image)
-VALUES(2, 'user2', 'user', '2', '', 'user2@gmail.com', '$2b$10$AhMp8wE9G2uwbiaJDaION.xt.GOi7KwOz07CGMVIWiqy69FMuhHh.', '1', 'user', NULL, 19000, '/public/img/Default_Profile2.png');
+VALUES(2, 'user2', 'user', '2', '', 'user2@gmail.com', '$2b$10$AhMp8wE9G2uwbiaJDaION.xt.GOi7KwOz07CGMVIWiqy69FMuhHh.', '1', 'user', NULL, 19000, '/public/img/Default_Profile.png');
 INSERT INTO public.users
 (id_user, username, first_name, last_name, phone, email, pass, status_verification, "role", pin, balance, image)
-VALUES(1, 'user1', 'user', '1', '', 'user1@gmail.com', '$2b$10$yklheij9vslc2GC1xTEjZOmwxthcT.LllLjC.9QS2UA7OJX9Np7lG', '1', 'user', NULL, 26000, '/public/img/Default_Profile1.png');
+VALUES(1, 'user1', 'user', '1', '', 'user1@gmail.com', '$2b$10$yklheij9vslc2GC1xTEjZOmwxthcT.LllLjC.9QS2UA7OJX9Np7lG', '1', 'user', NULL, 26000, '/public/img/Default_Profile.png');
 
 -- NB: password login = 123456
 
