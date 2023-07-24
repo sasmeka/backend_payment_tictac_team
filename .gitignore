@@ -2,3 +2,5 @@
 
 # dependencies
 node_modules
+public/img/*
+!public/img/Default_Profile.png
