@@ -3,13 +3,13 @@ const sendMail = (email, subject, text) => {
     const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-            user: process.env.guser,
-            pass: process.env.gpass
+            user: process.env.GUSER,
+            pass: process.env.GPASS
         }
     });
 
     const mailOptions = {
-        from: process.env.guser,
+        from: process.env.GUSER,
         to: email,
         subject: subject,
         text: text
