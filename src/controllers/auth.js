@@ -85,7 +85,7 @@ control.register = async (req, res) => {
         //send verification mail
         const token_verification = jwt(email).token
         const subject_mail = 'Zwallet Verification'
-        const text_mail = process.env.front_url + `/verification?token=${token_verification}`
+        const text_mail = process.env.FRONT_URL + `/verification?token=${token_verification}`
         sendMail(email, subject_mail, text_mail)
 
         return resp(res, 200, result)
@@ -128,7 +128,7 @@ control.sendEmailForgetPass = async (req, res) => {
         //send forget mail
         const token_forget = jwt(email).token
         const subject_mail = 'Forget Password Zwallet'
-        const text_mail = process.env.front_url + `/reset-change-password?token=${token_forget}`
+        const text_mail = process.env.FRONT_URL + `/reset-change-password?token=${token_forget}`
         sendMail(email, subject_mail, text_mail)
 
         return resp(res, 200, 'please check your email to change the password.')
