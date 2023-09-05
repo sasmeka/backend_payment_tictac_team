@@ -69,7 +69,7 @@ control.updateData = async (req, res) => {
         if (req.file != undefined) {
             image = await upload(req.file.path)
         } else {
-            return respons(res, 400, 'png, jpg, jpeg only')
+            return resp(res, 400, 'png, jpg, jpeg only')
         }
 
 
