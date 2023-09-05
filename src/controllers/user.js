@@ -66,8 +66,6 @@ control.updateData = async (req, res) => {
         // const image = req.file !== undefined ? req.file.path : ''
 
         let image = ''
-
-        console.log(req.file)
         if (req.file != undefined) {
             image = await upload(req.file.path)
         } else {
