@@ -7,7 +7,7 @@ model.getAllData = ({ limit, offset, search_name, search_phone_number, id_user, 
     search_phone_number = search_phone_number == "" ? "" : escape("AND phone %s", "like '%" + search_phone_number + "%'")
     search = search == "" ? "" : escape("AND (LOWER(first_name) %s OR LOWER(last_name) %s OR phone %s)", "like '%" + search + "%'", "like '%" + search + "%'", "like '%" + search + "%'")
     return new Promise((resolve, reject) => {
-        db.query(`SELECT id_user,username, first_name, last_name, phone, email, status_verification, "role",image,balance FROM public.users where true ${search_name} ${search_phone_number} ${search} AND id_user!=$3 ORDER BY first_name,last_name ASC LIMIT $1 OFFSET $2;`, [limit, offset, id_user])
+        db.query(`SELECT id_user,username, first_name, last_name, phone, email, status_verification, "role",image,balance FROM users where true ${search_name} ${search_phone_number} ${search} AND id_user!=$3 ORDER BY first_name,last_name ASC LIMIT $1 OFFSET $2;`, [limit, offset, id_user])
             .then((res) => {
                 resolve(res)
             }).catch((e) => {
@@ -32,7 +32,7 @@ model.getCountData = ({ search_name, search_phone_number, id_user, search }) => 
 
 model.getData = (id) => {
     return new Promise((resolve, reject) => {
-        db.query('SELECT id_user,username, first_name, last_name, phone, email, status_verification, pin, "role", image, balance FROM public.users WHERE id_user=$1;', [id])
+        db.query('SELECT id_user,username, first_name, last_name, phone, email, status_verification, pin, "role", image, balance FROM users WHERE id_user=$1;', [id])
             .then((res) => {
                 resolve(res)
             }).catch((e) => {
@@ -43,7 +43,7 @@ model.getData = (id) => {
 
 model.getDataAll = (id) => {
     return new Promise((resolve, reject) => {
-        db.query('SELECT * FROM public.users WHERE id_user=$1;', [id])
+        db.query('SELECT * FROM users WHERE id_user=$1;', [id])
             .then((res) => {
                 resolve(res)
             }).catch((e) => {
@@ -54,7 +54,7 @@ model.getDataAll = (id) => {
 
 model.newIdData = () => {
     return new Promise((resolve, reject) => {
-        db.query('SELECT currval(pg_get_serial_sequence(\'public.users\', \'id_user\')) as new_id_user')
+        db.query('SELECT currval(pg_get_serial_sequence(\'users\', \'id_user\')) as new_id_user')
             .then((res) => {
                 resolve(res)
             }).catch((e) => {
@@ -64,7 +64,7 @@ model.newIdData = () => {
 }
 model.getDatabyEmail = (email) => {
     return new Promise((resolve, reject) => {
-        db.query('SELECT * FROM public.users WHERE email=$1 limit 1;', [email])
+        db.query('SELECT * FROM users WHERE email=$1 limit 1;', [email])
             .then((res) => {
                 resolve(res)
             }).catch((e) => {
@@ -75,7 +75,7 @@ model.getDatabyEmail = (email) => {
 
 model.addData = ({ username, first_name, last_name, email, pass_hash }) => {
     return new Promise((resolve, reject) => {
-        db.query('insert into public.users (username, first_name, last_name, email, pass, status_verification) values ($1,$2,$3,$4,$5,0);', [username, first_name, last_name, email, pass_hash])
+        db.query('insert into users (username, first_name, last_name, email, pass, status_verification) values ($1,$2,$3,$4,$5,0);', [username, first_name, last_name, email, pass_hash])
             .then(() => {
                 resolve('account has been registered, please verify via email.')
             }).catch((e) => {
@@ -87,7 +87,7 @@ model.addData = ({ username, first_name, last_name, email, pass_hash }) => {
 model.updateData = ({ id_user, first_name, last_name, email, image, status_verification }) => {
     image = image == "" ? "" : escape(", image=%L", image)
     return new Promise((resolve, reject) => {
-        db.query(`update public.users SET first_name=$2, last_name=$3, email=$4, status_verification=$5 ${image} where id_user = $1;`, [id_user, first_name, last_name, email, status_verification])
+        db.query(`update users SET first_name=$2, last_name=$3, email=$4, status_verification=$5 ${image} where id_user = $1;`, [id_user, first_name, last_name, email, status_verification])
             .then(() => {
                 resolve('user data successfully updated.')
             }).catch(() => {
@@ -98,7 +98,7 @@ model.updateData = ({ id_user, first_name, last_name, email, image, status_verif
 
 model.updatePin = ({ id_user, pin }) => {
     return new Promise((resolve, reject) => {
-        db.query(`update public.users SET pin=$2 where id_user = $1;`, [id_user, pin])
+        db.query(`update users SET pin=$2 where id_user = $1;`, [id_user, pin])
             .then(() => {
                 resolve('PIN successfully updated.')
             }).catch(() => {
@@ -109,7 +109,7 @@ model.updatePin = ({ id_user, pin }) => {
 
 model.addDataPhoneNumber = ({ id_user, phone }) => {
     return new Promise((resolve, reject) => {
-        db.query(`update public.users SET phone=$2 where id_user = $1;`, [id_user, phone])
+        db.query(`update users SET phone=$2 where id_user = $1;`, [id_user, phone])
             .then(() => {
                 resolve('phone number successfully added.')
             }).catch(() => {
@@ -120,7 +120,7 @@ model.addDataPhoneNumber = ({ id_user, phone }) => {
 
 model.deleteDataPhoneNumber = ({ id_user }) => {
     return new Promise((resolve, reject) => {
-        db.query(`update public.users SET phone=NULL where id_user = $1;`, [id_user])
+        db.query(`update users SET phone=NULL where id_user = $1;`, [id_user])
             .then(() => {
                 resolve('phone number successfully deleted.')
             }).catch(() => {
@@ -131,7 +131,7 @@ model.deleteDataPhoneNumber = ({ id_user }) => {
 
 model.change_Password = ({ id_user, new_pass }) => {
     return new Promise((resolve, reject) => {
-        db.query(`update public.users SET pass=$2 where id_user = $1;`, [id_user, new_pass])
+        db.query(`update users SET pass=$2 where id_user = $1;`, [id_user, new_pass])
             .then(() => {
                 resolve('change password successfully.')
             }).catch(() => {
@@ -142,7 +142,7 @@ model.change_Password = ({ id_user, new_pass }) => {
 
 model.verification = ({ result_id, result_email }) => {
     return new Promise((resolve, reject) => {
-        db.query('update public.users SET status_verification=1 where id_user = $1 and email=$2;', [result_id, result_email])
+        db.query('update users SET status_verification=1 where id_user = $1 and email=$2;', [result_id, result_email])
             .then(() => {
                 resolve('verified account successfully.')
             }).catch(() => {
@@ -153,7 +153,7 @@ model.verification = ({ result_id, result_email }) => {
 
 model.changeForgetPassword = ({ result_id, result_email, pass_hash }) => {
     return new Promise((resolve, reject) => {
-        db.query('update public.users SET pass=$3 where id_user = $1 and email=$2;', [result_id, result_email, pass_hash])
+        db.query('update users SET pass=$3 where id_user = $1 and email=$2;', [result_id, result_email, pass_hash])
             .then(() => {
                 resolve('change forget password successfully.')
             }).catch(() => {
@@ -164,7 +164,7 @@ model.changeForgetPassword = ({ result_id, result_email, pass_hash }) => {
 
 model.deleteData = ({ id_user }) => {
     return new Promise((resolve, reject) => {
-        db.query('delete from public.users where id_user=$1', [id_user])
+        db.query('delete from users where id_user=$1', [id_user])
             .then(() => {
                 resolve('user data successfully deleted.')
             }).catch(() => {

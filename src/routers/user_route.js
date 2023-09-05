@@ -5,6 +5,7 @@ const authCheck = require('../middlewares/authCheck')
 // import controllers
 const control = require('../controllers/user')
 const upload_file = require('../middlewares/upload_files')
+// const upload_file = require('../utils/uploads')
 
 route.get('/', authCheck('user'), control.getAllData)
 route.get('/bytoken', authCheck('user'), control.getData)

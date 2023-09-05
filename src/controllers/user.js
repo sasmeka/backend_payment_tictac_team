@@ -5,6 +5,7 @@ const resp = require('../utils/responses')
 const hashing = require('../utils/hashing')
 const jwt = require('../utils/jwt')
 const sendMail = require('../utils/sendMail')
+const upload = require('../utils/uploads')
 
 control.getAllData = async (req, res) => {
     try {
@@ -62,7 +63,18 @@ control.updateData = async (req, res) => {
     try {
         const id_user = req.params.id
         const { first_name, last_name, email } = req.body
-        const image = req.file !== undefined ? req.file.path : ''
+        // const image = req.file !== undefined ? req.file.path : ''
+
+        let image = ''
+
+        console.log(req.file)
+        if (req.file != undefined) {
+            image = await upload(req.file.path)
+        } else {
+            return respons(res, 400, 'png, jpg, jpeg only')
+        }
+
+
         const result_data = await model.getData(id_user)
         if (result_data.rowCount == 0) throw 'data not found.'
         const first_email = result_data.rows[0].email

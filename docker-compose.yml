@@ -1,0 +1,20 @@
+version: '3.9'
+services:
+  tictacwallet:
+    image: sasmeka/tictacwallet
+    ports:
+      - '8083:8001'
+    networks:
+      - gonet
+    environment:
+      - DB_HOST=172.18.0.2
+      - DB_NAME=tictac_database
+      - DB_USER=fazz
+      - DB_PASS=abcd1234
+      - DB_PORT=5432
+      # - WHITELIST=https://glistening-taffy-bfdcf2.netlify.app,http://localhost:3000
+
+networks:
+  gonet:
+    name: devnet
+    external: true
