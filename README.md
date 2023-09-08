@@ -40,6 +40,7 @@
       </ul>
     </li>
     <li><a href="#usage">Usage</a></li>
+    <li><a href="#related-projects">Related Projects</a></li>
     <li><a href="#contact">Contact</a></li>
   </ol>
 </details>
@@ -128,6 +129,13 @@ This project worker can follow the steps below:
 3. Import the workspace that you already have in stage 2 into the postman application
 4. Go to tickitz workspace -> auth -> login. The default email and pass please use user1@gmail.com and 123456. The token obtained can be used to access data
 5. Please try to do get data with the token. To insert a token, you can do it on the authorization tab and select Bearer Token
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- USAGE EXAMPLES -->
+## Related Projects
+
+[Fronten Zwallet](https://github.com/sasmeka/frontend_wallet_tictac_team)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
